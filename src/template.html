@@ -53,6 +53,7 @@ p{margin:0}
 .big{font-size:clamp(52px,8vw,80px);line-height:1;font-weight:800;letter-spacing:-.03em;margin-top:4px;white-space:nowrap}
 .big .cur{font-size:.32em;letter-spacing:0;font-weight:600;color:var(--muted)}
 .sub{margin-top:8px;color:var(--muted)}
+.linkish{background:none;border:0;padding:0;font:inherit;color:var(--net);text-decoration:underline;text-underline-offset:2px;cursor:pointer}
 .pill{display:inline-block;padding:1px 8px;margin-right:6px;border-radius:6px;background:var(--flagb);color:#fff;font-weight:700;font-size:14px}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(9.5em,1fr));gap:12px 24px;margin-top:22px;padding-block:16px;border-block:1px solid var(--line)}
 .v{font-size:22px;font-weight:700;white-space:nowrap}
@@ -162,6 +163,7 @@ td.n{font-weight:700}
 <p class="big"><span id="hNet">–</span> <span class="cur">CHF</span></p>
 <p class="sub" id="hSub"></p>
 <p class="sub" id="hCode"></p>
+<p class="sub" id="hLpp" hidden></p>
 <div class="stats">
 <div><p class="k" id="sYearL">Netto nell'anno</p><p class="v" id="sYear">–</p></div>
 <div><p class="k">Imposta alla fonte</p><p class="v" id="sTax">–</p></div>
@@ -445,6 +447,9 @@ function render() {
   $('hNet').textContent = f0(res.typical);
   $('hSub').textContent = `su ${fmt(res.typicalGross)} franchi lordi al mese` + (p.fam ? `, più ${fmt(p.fam)} di assegni familiari` : '');
   $('hCode').innerHTML = `<span class="pill">${res.code}</span>${codeText(res.code)}`;
+  const lppNote = $('hLpp');
+  lppNote.hidden = !(s.lppMode === 'auto' && res.lppMonthly > 0);
+  if (!lppNote.hidden) lppNote.innerHTML = `Con la LPP minima di legge, ${fmt(res.lppMonthly)} al mese. <button type="button" class="linkish" id="lppFix">Metti quella della tua busta paga</button>`;
   const full = s.start === 1 && s.end === 12;
   $('sYearL').textContent = full ? "Netto nell'anno" : `Netto da ${mese(s.start)} a ${mese(s.end)}`;
   $('sYear').textContent = f0(res.tot.net);
@@ -517,6 +522,11 @@ $('bonuses').addEventListener('click', e => {
   readForm(); bonuses.splice(+b.dataset.rm, 1); drawBonuses(); render();
 });
 $('addB').addEventListener('click', () => { readForm(); bonuses.push({month: 6, amount: 1000}); drawBonuses(); render(); $('ba' + (bonuses.length - 1)).focus(); });
+$('hLpp').addEventListener('click', e => {
+  if (!e.target.closest('#lppFix')) return;
+  $('lppMode').closest('details').open = true; $('lppMode').value = 'manual'; render();
+  $('lpp').focus(); $('lpp').select();
+});
 $('copy').addEventListener('click', async () => {
   if (!last) return;
   const rows = [['Mese', 'Lordo', 'Assegni familiari', 'Contributi e LPP', 'Imposta alla fonte', 'Aliquota', 'Ricalcolo', 'Altre voci', 'Netto']];
