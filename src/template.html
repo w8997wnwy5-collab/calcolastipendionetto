@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="it-CH">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Calcolo stipendio netto Ticino 2026 · imposta alla fonte</title>
+<meta name="description" content="Calcola lo stipendio netto mese per mese in Ticino con l'imposta alla fonte 2026: tabelle A, B, C, H e frontalieri, tredicesima, bonus, assegni familiari, AVS e LPP.">
+<link rel="canonical" href="__SITE__">
+<meta name="theme-color" content="#123c86">
+<meta name="color-scheme" content="light dark">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="it_CH">
+<meta property="og:site_name" content="calcolastipendionetto.ch">
+<meta property="og:title" content="Calcola lo stipendio netto in Ticino">
+<meta property="og:description" content="Calcolatore dello stipendio netto per chi è tassato alla fonte in Ticino. Tabelle ufficiali 2026 per persone sole, famiglie e frontalieri.">
+<meta property="og:url" content="__SITE__">
+<meta property="og:image" content="__SITE__og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Calcola lo stipendio netto in Ticino, con imposta alla fonte 2026">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3CclipPath id='c'%3E%3Crect width='32' height='32' rx='7'/%3E%3C/clipPath%3E%3Cg clip-path='url(%23c)'%3E%3Crect width='32' height='16' fill='%23d52b1e'/%3E%3Crect y='16' width='32' height='16' fill='%23123c86'/%3E%3C/g%3E%3Ctext x='16' y='23.5' font-family='Arial,sans-serif' font-weight='700' font-size='19' text-anchor='middle' fill='%23fff'%3EN%3C/text%3E%3C/svg%3E">
+<link rel="preload" href="fonts/mona-sans-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<script type="application/ld+json">__LD__</script>
+<style>
+/* VOICE work: a money tool, calm like a newspaper graphics desk
+   IDEA a Ticino payslip run for the whole year, twelve payslips side by side, for any household
+   PICTURE twelve stacked columns showing where every franc of each month goes
+   COLOUR white ground and ink, Ticino flag red and blue as header fields; blue net, teal contributions, red source tax
+   TYPE Mona Sans (self-hosted, same as the rest of the site) 800 for the name and the result, 400-600 for text
+   LAYOUT laptop: settings left in collapsible groups, live result and chart right; phone: result first, then settings, table, answers */
+@font-face{font-family:"Mona Sans";font-style:normal;font-display:swap;font-weight:200 900;font-stretch:75% 125%;src:url(fonts/mona-sans-var.woff2) format("woff2")}
+:root{color-scheme:light dark;--bg:light-dark(#ffffff,#15171b);--ink:light-dark(#101318,#eef1f5);--muted:light-dark(#566070,#a3abb8);--line:light-dark(#e2e5ea,#2b2f36);--edge:light-dark(#b9c0ca,#4a505a);--panel:light-dark(#f3f5f8,#1c1f25);--flagr:#d52b1e;--flagb:light-dark(#123c86,#0f2754);--net:light-dark(#1f4fa3,#5a7cf0);--soc:light-dark(#0f9fb0,#25b39c);--tax:light-dark(#d23a2c,#f2645a);--font:"Mona Sans",system-ui,-apple-system,"Segoe UI",sans-serif}
+*{box-sizing:border-box;min-width:0}
+html{scroll-padding-top:72px}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 var(--font);overflow-x:clip}
+.skip{position:absolute;left:-9999px;top:8px;z-index:9;background:var(--bg);color:var(--ink);padding:10px 14px;border-radius:8px}
+.skip:focus{left:8px}
+.band{padding-block:clamp(24px,4vw,56px);padding-left:max(5vw,16px,env(safe-area-inset-left,0px));padding-right:max(5vw,16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1240px;margin-inline:auto}
+.flag{height:12px;background:var(--flagr)}
+.head{background:var(--flagb);color:#fff;padding-block:clamp(20px,3vw,36px)}
+.kicker{margin:0 0 6px;font-size:14px;font-weight:600;letter-spacing:.02em;color:#c9d4ea}
+h1{margin:0;font-size:clamp(34px,5vw,50px);line-height:1.05;letter-spacing:-.02em;font-weight:800}
+.lead{margin:8px 0 0;max-width:64ch;font-size:17px;color:#dfe6f3}
+h2{margin:0;font-size:clamp(26px,3vw,32px);line-height:1.1;letter-spacing:-.02em;font-weight:800}
+h3{margin:0 0 6px;font-size:18px;line-height:1.25}
+p{margin:0}
+.work{display:grid;gap:clamp(24px,3vw,44px);align-items:start}
+@media(min-width:900px){.work{grid-template-columns:minmax(320px,390px) minmax(0,1fr);grid-template-areas:"form result"}.panel{grid-area:form}.result{grid-area:result;position:sticky;top:16px}}
+.k{font-size:14px;color:var(--muted);font-weight:500}
+.big{font-size:clamp(52px,8vw,80px);line-height:1;font-weight:800;letter-spacing:-.03em;margin-top:4px;white-space:nowrap}
+.big .cur{font-size:.32em;letter-spacing:0;font-weight:600;color:var(--muted)}
+.sub{margin-top:8px;color:var(--muted)}
+.pill{display:inline-block;padding:1px 8px;margin-right:6px;border-radius:6px;background:var(--flagb);color:#fff;font-weight:700;font-size:14px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(9.5em,1fr));gap:12px 24px;margin-top:22px;padding-block:16px;border-block:1px solid var(--line)}
+.v{font-size:22px;font-weight:700;white-space:nowrap}
+.v small{display:block;font-size:14px;font-weight:500;color:var(--muted);white-space:normal}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;margin:20px 0 10px;font-size:14px}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.legend i{width:12px;height:12px;border-radius:3px;display:inline-block}
+.chart{position:relative}
+.plot{position:relative;height:250px;margin-left:44px}
+.grid{position:absolute;left:-44px;right:0;border-top:1px solid var(--line)}
+.grid b{position:absolute;left:0;top:-10px;width:38px;text-align:right;font:500 13px/1 var(--font);color:var(--muted);font-variant-numeric:tabular-nums}
+.cols{position:absolute;inset:0;display:grid;grid-template-columns:repeat(12,minmax(0,1fr))}
+.col{position:relative;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;cursor:default;outline:none;border-radius:6px}
+.col:hover,.col:focus-visible{background:color-mix(in srgb,var(--ink) 6%,transparent)}
+.col:focus-visible{box-shadow:inset 0 0 0 2px var(--net)}
+.bar{width:min(24px,64%);display:flex;flex-direction:column;gap:2px}
+.bar i{display:block;min-height:1px}
+.bar i:first-child{border-radius:4px 4px 0 0}
+.xax{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));margin-left:44px;border-top:1px solid var(--edge);padding-top:6px;font-size:13px;color:var(--muted);text-align:center}
+.xax .l1{display:none}
+.xax .off{opacity:.45}
+.tip{position:absolute;top:0;z-index:3;width:228px;background:var(--bg);border:1px solid var(--edge);border-radius:10px;padding:10px 12px;font-size:14px;box-shadow:0 6px 20px color-mix(in srgb,#000 18%,transparent);pointer-events:none}
+.tip p{display:flex;justify-content:space-between;gap:12px}
+.tip strong{display:block;margin-bottom:4px}
+.note{margin-top:16px;max-width:70ch}
+.warn{margin-top:12px;padding:10px 12px;border-radius:8px;background:color-mix(in srgb,var(--tax) 12%,transparent)}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px 20px 8px}
+.panel h2{font-size:22px;margin-bottom:8px}
+.ghost{min-height:44px;padding:0 14px;border-radius:22px;border:1px solid var(--edge);background:var(--bg);color:var(--ink);font:500 15px var(--font);cursor:pointer}
+.ghost:hover{border-color:var(--net)}
+.ex{border-top:1px solid var(--line);padding-top:16px}
+.grp{border-top:1px solid var(--line)}
+.grp>summary{list-style:none;display:flex;align-items:center;gap:12px;min-height:52px;padding-block:10px;cursor:pointer;border-radius:6px}
+.grp>summary::-webkit-details-marker{display:none}
+.grp>summary:focus-visible{outline:2px solid var(--net);outline-offset:2px}
+.st{font-weight:700;font-size:17px}
+.sv{margin-left:auto;font-size:14px;color:var(--muted);text-align:right}
+.grp>summary::after{content:"";width:8px;height:8px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:translateY(-3px) rotate(45deg);flex:none;margin-right:4px}
+.grp[open]>summary::after{transform:translateY(2px) rotate(225deg)}
+.body{padding-bottom:14px}
+.f{display:grid;gap:6px;margin-bottom:16px}
+.f label,.lbl{font-weight:600;font-size:15px}
+.hint{font-size:14px;color:var(--muted);line-height:1.4}
+input[type=number],select{width:100%;height:44px;padding:0 12px;font:16px var(--font);color:var(--ink);background:var(--bg);border:1px solid var(--edge);border-radius:8px}
+input:focus-visible,select:focus-visible,button:focus-visible{outline:2px solid var(--net);outline-offset:2px}
+select:disabled{opacity:.5}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+.amt{display:grid;grid-template-columns:minmax(0,1fr) 96px;gap:12px;align-items:end}
+.seg{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--edge);border-radius:10px;overflow:hidden;margin-bottom:12px}
+.seg input{position:absolute;opacity:0;width:1px;height:1px}
+.seg label{display:flex;align-items:center;justify-content:center;min-height:44px;font-weight:600;font-size:15px;cursor:pointer;background:var(--bg)}
+.seg input:checked+label{background:var(--ink);color:var(--bg)}
+.seg input:focus-visible+label{outline:2px solid var(--net);outline-offset:-4px}
+.brow{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) 44px;gap:8px;margin-bottom:8px}
+.x{height:44px;border-radius:8px;border:1px solid var(--edge);background:var(--bg);color:var(--ink);font-size:20px;cursor:pointer}
+.check{display:flex;gap:10px;align-items:flex-start;margin:6px 0 14px}
+.check input{width:20px;height:20px;margin:2px 0 0;accent-color:var(--net);flex:none}
+.sechead{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:12px;margin-bottom:16px}
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{padding:9px 10px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap;font-variant-numeric:tabular-nums}
+th:first-child,td:first-child{text-align:left}
+th{font-size:14px;font-weight:600;color:var(--muted);vertical-align:bottom;white-space:normal}
+tfoot td{font-weight:700;border-bottom:0;border-top:2px solid var(--ink)}
+td.n{font-weight:700}
+.pos{font-weight:700}
+.how{display:grid;gap:20px 40px}
+@media(min-width:720px){.how{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+.how p,.foot p,.faq p{max-width:68ch}
+.limits{margin-top:28px;padding-top:18px;border-top:1px solid var(--line)}
+.faq{margin-top:16px;max-width:860px}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{list-style:none;display:flex;justify-content:space-between;align-items:center;gap:16px;min-height:52px;padding-block:12px;font-weight:700;font-size:17px;cursor:pointer}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font-size:24px;font-weight:400;color:var(--muted);flex:none}
+.faq details[open] summary::after{content:"−"}
+.faq p{padding-bottom:16px}
+.ad{padding-block:8px}
+.ad .wrap{min-height:120px}
+.ad-l{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.foot{background:var(--flagb);color:#e8edf6}
+.foot p{color:#e8edf6;font-size:15px}
+.foot p+p{margin-top:10px}
+.foot a{color:#fff}
+.sticky{position:fixed;left:0;right:0;bottom:0;z-index:5;background:var(--flagb);color:#fff;padding:10px max(16px,env(safe-area-inset-left,0px)) calc(10px + env(safe-area-inset-bottom,0px));font-size:15px;display:flex;justify-content:space-between;gap:12px}
+.sticky[hidden],[hidden]{display:none!important}
+@media(min-width:900px){.sticky{display:none}}
+@media(max-width:600px){.plot{height:210px}.xax .l3{display:none}.xax .l1{display:inline}table{font-size:14px}th,td{padding:6px 4px}.stack thead{display:none}.stack tr{display:grid;padding-block:10px;border-bottom:1px solid var(--line)}.stack td{display:flex;justify-content:space-between;gap:12px;border:0;padding:3px 0}.stack td::before{content:attr(data-l);color:var(--muted);font-weight:500}.stack td:first-child{justify-content:flex-start;font-weight:700;font-size:16px}.stack td:empty{display:none}tfoot td{border-top:0}}
+@media(prefers-reduced-motion:no-preference){.bar i{transition:flex-grow .35s ease}}
+</style>
+</head>
+<body>
+<a class="skip" href="#form">Vai ai dati</a>
+<header>
+<div class="flag"></div>
+<div class="band head"><div class="wrap">
+<p class="kicker">calcolastipendionetto.ch · tabelle ufficiali 2026</p>
+<h1>Calcola lo stipendio netto in Ticino</h1>
+<p class="lead">Quanto ti entra davvero ogni mese se sei tassato alla fonte. Per persone sole, coppie, famiglie e frontalieri, con tredicesima, bonus e ricalcoli compresi.</p>
+</div></div>
+</header>
+
+<main>
+<div class="band"><div class="wrap work">
+<section class="result" id="result" aria-live="polite" aria-label="Risultato">
+<p class="k" id="hLab">Netto in un mese normale</p>
+<p class="big"><span id="hNet">–</span> <span class="cur">CHF</span></p>
+<p class="sub" id="hSub"></p>
+<p class="sub" id="hCode"></p>
+<div class="stats">
+<div><p class="k" id="sYearL">Netto nell'anno</p><p class="v" id="sYear">–</p></div>
+<div><p class="k">Imposta alla fonte</p><p class="v" id="sTax">–</p></div>
+<div><p class="k">Aliquota a fine anno</p><p class="v" id="sRate">–</p></div>
+<div><p class="k">Mese più alto</p><p class="v" id="sMax">–</p></div>
+</div>
+<div class="legend" aria-hidden="true"><span><i style="background:var(--net)"></i>Netto</span><span><i style="background:var(--soc)"></i><span id="legSoc">Contributi e LPP</span></span><span><i style="background:var(--tax)"></i>Imposta alla fonte</span></div>
+<div class="chart" id="chart">
+<div class="plot" id="plot" role="img" aria-label="Ogni mese diviso in netto, contributi e imposta alla fonte"></div>
+<div class="xax" id="xax"></div>
+<div class="tip" id="tip" hidden></div>
+</div>
+<p class="note" id="note"></p>
+<p class="warn" id="warn" hidden></p>
+</section>
+
+<form class="panel" id="form" autocomplete="off" novalidate>
+<h2>I tuoi dati</h2>
+<details class="grp" open>
+<summary><span class="st">Stipendio</span><span class="sv" id="svPay"></span></summary>
+<div class="body">
+<div class="seg" role="radiogroup" aria-label="Come inserisci lo stipendio">
+<input type="radio" name="inMode" id="inYear" value="year"><label for="inYear">Lordo annuo</label>
+<input type="radio" name="inMode" id="inMonth" value="month"><label for="inMonth">Lordo mensile</label>
+</div>
+<div class="amt">
+<div class="f"><label for="amount" id="amountL">Lordo annuo da contratto (CHF)</label><input id="amount" type="number" inputmode="decimal" min="0" step="100" aria-describedby="amountH"></div>
+<div class="f"><label for="pays">Mensilità</label><select id="pays"><option value="13">13</option><option value="12">12</option></select></div>
+</div>
+<p class="hint" id="amountH" style="margin:-8px 0 16px"></p>
+<div class="f"><label for="mode">Tredicesima pagata</label><select id="mode"><option value="dec">Tutta a dicembre</option><option value="nov">Tutta a novembre</option><option value="nov_dec">A novembre, saldo a dicembre</option><option value="jun_dec">Metà a giugno, metà a dicembre</option><option value="monthly">Un dodicesimo ogni mese</option></select></div>
+<div class="two">
+<div class="f"><label for="start">Lavori nel 2026 da</label><select id="start"></select></div>
+<div class="f"><label for="end">fino a</label><select id="end"></select></div>
+</div>
+</div>
+</details>
+
+<details class="grp" open>
+<summary><span class="st">Situazione</span><span class="sv" id="svWho"></span></summary>
+<div class="body">
+<div class="f"><label for="status">Stato civile</label><select id="status" aria-describedby="statusH"><option value="single">Persona sola</option><option value="parent">Persona sola con figli a carico</option><option value="married1">Sposato, in famiglia lavora solo uno</option><option value="married2">Sposato, lavorate entrambi</option></select><p class="hint" id="statusH">Sposato vale anche per l'unione domestica registrata.</p></div>
+<div class="two" id="kidsRow">
+<div class="f"><label for="kids">Figli a carico</label><select id="kids"></select></div>
+<div class="f"><label for="study">di cui 16-25 anni in formazione</label><select id="study"></select></div>
+</div>
+<div id="allowBox">
+<div class="check"><input type="checkbox" id="allow"><label for="allow" class="hint">Gli assegni familiari li ricevo io con lo stipendio</label></div>
+<div class="two" id="allowAmt">
+<div class="f"><label for="allowChild">Per figlio (CHF)</label><input id="allowChild" type="number" inputmode="decimal" min="0" step="1"></div>
+<div class="f"><label for="allowStudy">In formazione (CHF)</label><input id="allowStudy" type="number" inputmode="decimal" min="0" step="1"></div>
+</div>
+</div>
+<div class="f"><label for="res">Dove vivi</label><select id="res" aria-describedby="resH"><option value="res">In Svizzera (permesso B, L o altro)</option><option value="fr_new">In Italia, frontaliere dopo il 17.7.2023</option><option value="fr_old">In Italia, frontaliere da prima</option></select><p class="hint" id="resH"></p></div>
+<div class="f"><label for="age">Età che compi nel 2026</label><select id="age"><option value="minor">Meno di 18 anni</option><option value="a18">18-24 anni</option><option value="a25">25-34 anni</option><option value="a35">35-44 anni</option><option value="a45">45-54 anni</option><option value="a55">55-64 anni</option><option value="retired">65 o più, già in età AVS</option></select></div>
+</div>
+</details>
+
+<details class="grp">
+<summary><span class="st">Contributi e LPP</span><span class="sv" id="svSoc"></span></summary>
+<div class="body">
+<div class="f"><label for="lppMode">Cassa pensione (LPP)</label><select id="lppMode" aria-describedby="lppH"><option value="auto">Stima del minimo di legge</option><option value="manual">Importo della mia busta paga</option><option value="none">Nessuna trattenuta LPP</option></select><p class="hint" id="lppH"></p></div>
+<div class="f" id="lppRow"><label for="lpp">LPP al mese (CHF)</label><input id="lpp" type="number" inputmode="decimal" min="0" step="0.05"></div>
+<div class="two">
+<div class="f"><label for="ainp">Infortuni LAINF (%)</label><input id="ainp" type="number" inputmode="decimal" min="0" max="5" step="0.01"></div>
+<div class="f"><label for="igm">Malattia IGM (%)</label><input id="igm" type="number" inputmode="decimal" min="0" max="5" step="0.01"></div>
+</div>
+<p class="hint">Le percentuali sono sulla busta paga: la LAINF di solito sta tra 0.7 e 1.5%, l'indennità di malattia tra 0 e 1%. AVS/AI/IPG al 5.3% e disoccupazione all'1.1% sono fisse per legge.</p>
+</div>
+</details>
+
+<details class="grp">
+<summary><span class="st">Bonus e aumenti</span><span class="sv" id="svBon"></span></summary>
+<div class="body">
+<p class="lbl">Bonus e premi una tantum</p>
+<div id="bonuses" style="margin-top:8px"></div>
+<button type="button" class="ghost" id="addB">Aggiungi un bonus</button>
+<div class="check" style="margin-top:14px"><input type="checkbox" id="proj"><label for="proj" class="hint">Il mio programma paga proietta i bonus su tutto l'anno: aliquota più alta subito, piccoli rimborsi nei mesi dopo. Senza spunta vale la regola della Circolare AFC n. 45.</label></div>
+<div class="check"><input type="checkbox" id="raiseOn"><label for="raiseOn" class="lbl">Aumento di stipendio nel corso dell'anno</label></div>
+<div class="two" id="raiseRow">
+<div class="f"><label for="raiseMonth">Da</label><select id="raiseMonth"></select></div>
+<div class="f"><label for="raiseAmount" id="raiseL">Nuovo lordo annuo</label><input id="raiseAmount" type="number" inputmode="decimal" min="0" step="100"></div>
+</div>
+</div>
+</details>
+
+<details class="grp">
+<summary><span class="st">Altre voci in busta</span><span class="sv" id="svOth"></span></summary>
+<div class="body">
+<p class="hint" style="margin-bottom:12px">Importi al mese, in franchi.</p>
+<div class="f"><label for="fixed">Indennità fisse imponibili</label><input id="fixed" type="number" inputmode="decimal" min="0" step="10" placeholder="0"><p class="hint">Per esempio indennità di funzione o di turno. Non entrano nella tredicesima.</p></div>
+<div class="f"><label for="car">Auto aziendale: prezzo d'acquisto senza IVA</label><input id="car" type="number" inputmode="decimal" min="0" step="1000" placeholder="0" aria-describedby="carH"><p class="hint" id="carH">Se la usi anche per te, ogni mese si aggiunge al lordo lo 0.9% del prezzo.</p></div>
+<div class="f"><label for="bik">Altro salario in natura (vitto, alloggio)</label><input id="bik" type="number" inputmode="decimal" min="0" step="10" placeholder="0"></div>
+<div class="f"><label for="exp">Rimborsi spese forfettari non imponibili</label><input id="exp" type="number" inputmode="decimal" min="0" step="10" placeholder="0"></div>
+<div class="f"><label for="other">Altre trattenute dal netto</label><input id="other" type="number" inputmode="decimal" min="0" step="10" placeholder="0"><p class="hint">Mensa, parcheggio, quote sindacali.</p></div>
+</div>
+</details>
+<div class="f ex"><label for="preset">Oppure parti da un esempio</label><select id="preset"><option value="">Scegli un caso tipo</option><option value="single">Persona sola, 70'000</option><option value="b2">Sposato, un reddito, 2 figli</option><option value="c1">Sposati, due redditi, 1 figlio</option><option value="h1">Genitore solo, 1 figlio</option><option value="fr">Nuovo frontaliere, 70'000</option><option value="maggio">Assunto a maggio, bonus a dicembre</option></select></div>
+</form>
+</div></div>
+
+<aside class="band ad" hidden aria-label="Pubblicità"><div class="wrap"><p class="ad-l">Pubblicità</p><ins class="adsbygoogle" style="display:block" data-ad-format="auto" data-full-width-responsive="true"></ins></div></aside>
+
+<section class="band" id="mesi" style="padding-top:0"><div class="wrap">
+<div class="sechead"><h2>Mese per mese</h2><button type="button" class="ghost" id="copy">Copia la tabella</button></div>
+<div class="scroll"><table class="stack" id="tbl"><thead id="th"></thead><tbody id="tb"></tbody><tfoot id="tf"></tfoot></table></div>
+</div></section>
+
+<aside class="band ad" hidden aria-label="Pubblicità"><div class="wrap"><p class="ad-l">Pubblicità</p><ins class="adsbygoogle" style="display:block" data-ad-format="auto" data-full-width-responsive="true"></ins></div></aside>
+
+<section class="band" style="background:var(--panel)"><div class="wrap">
+<h2 style="margin-bottom:20px">Perché l'imposta cambia ogni mese</h2>
+<div class="how">
+<div><h3>L'aliquota guarda all'anno intero</h3><p>In Ticino vale il modello annuale. Ogni mese il programma paga somma il lordo dall'inizio dell'anno, o da quando hai iniziato, lo riporta a dodici mesi e cerca l'aliquota nella tabella del Cantone che corrisponde alla tua situazione.</p></div>
+<div><h3>Ogni mese si rifà tutto il conto</h3><p>La nuova aliquota si applica a tutto il lordo già pagato, poi il programma toglie l'imposta già trattenuta. Se l'aliquota si muove anche solo di 0.1 punti, la differenza sui mesi passati finisce nella busta del mese.</p></div>
+<div><h3>Bonus: dipende dal programma paga</h3><p>Per la Circolare AFC n. 45 il bonus si somma al reddito dell'anno così com'è. Molti programmi invece lo proiettano su dodici mesi: l'aliquota salta subito e nei mesi dopo ti torna qualcosa. Se lavori tutto l'anno, a dicembre i due metodi arrivano allo stesso totale.</p></div>
+<div><h3>Tredicesima: il mese in cui il conto sale</h3><p>Quando arriva la tredicesima il reddito dell'anno cresce, l'aliquota sale e la differenza sui mesi già pagati viene trattenuta in un colpo solo. Per questo la busta della tredicesima è più leggera di quanto ci si aspetta.</p></div>
+</div>
+<div class="limits"><h3>Cosa non calcola</h3><p class="hint" style="font-size:15px">Con più di quattro figli usa la tabella per quattro, quindi stima un'imposta un po' più alta del reale. Sopra 250'800 franchi annui usa l'ultima aliquota pubblicata. Non calcola più datori di lavoro, il lavoro a ore, la tassazione ordinaria ulteriore né le imposte italiane dei frontalieri. La LPP automatica è il minimo di legge: molte casse trattengono di più. AVS/AI/IPG al 5.3%, disoccupazione all'1.1% fino a 148'200 franchi, tredicesima pro rata sui mesi lavorati.</p></div>
+</div></section>
+
+<section class="band" id="faq"><div class="wrap">
+<h2>Domande frequenti</h2>
+<div class="faq">__FAQ__</div>
+</div></section>
+
+<aside class="band ad" hidden aria-label="Pubblicità"><div class="wrap"><p class="ad-l">Pubblicità</p><ins class="adsbygoogle" style="display:block" data-ad-format="auto" data-full-width-responsive="true"></ins></div></aside>
+</main>
+
+<footer class="band foot"><div class="wrap">
+<p>Aliquote 2026 della Divisione delle contribuzioni del Cantone Ticino: tabelle <a href="https://m4.ti.ch/fileadmin/DFE/DC/DOC-IF/Aliquote_2026/Ticino_tabella_A_2026.pdf">A</a>, <a href="https://m4.ti.ch/fileadmin/DFE/DC/DOC-IF/Aliquote_2026/Ticino_tabella_B_2026.pdf">B</a>, <a href="https://m4.ti.ch/fileadmin/DFE/DC/DOC-IF/Aliquote_2026/Ticino_tabella_C_2026.pdf">C</a>, <a href="https://m4.ti.ch/fileadmin/DFE/DC/DOC-IF/Aliquote_2026/Ticino_tabella_H_2026.pdf">H</a> e, per i nuovi frontalieri, <a href="https://m4.ti.ch/fileadmin/DFE/DC/DOC-IF/Aliquote_2026/Ticino_tabella_R_2026.pdf">R</a>, <a href="https://m4.ti.ch/fileadmin/DFE/DC/DOC-IF/Aliquote_2026/Ticino_tabella_S_2026.pdf">S</a>, <a href="https://m4.ti.ch/fileadmin/DFE/DC/DOC-IF/Aliquote_2026/Ticino_tabella_T_2026.pdf">T</a>, <a href="https://m4.ti.ch/fileadmin/DFE/DC/DOC-IF/Aliquote_2026/Ticino_tabella_U_2026.pdf">U</a>. Assegni familiari: <a href="https://www.bsv.admin.ch/it/assegni-per-le-famiglie">Ufficio federale delle assicurazioni sociali</a>. Tassazione ordinaria ulteriore: <a href="https://www.estv.admin.ch/dam/estv/it/dokumente/dbst/kreisschreiben/dbst-ks-2019-1-045-d-anhang2-it.pdf.download.pdf/dbst-ks-2019-1-045-d-anhang2-it.pdf">Circolare AFC n. 45</a>.</p>
+<p>È una stima: non sostituisce la busta paga né una consulenza fiscale.</p>
+<p id="privNo">Privacy: i dati che inserisci restano nel tuo browser, che li ricorda per la prossima visita. Non vengono inviati a nessuno e questa pagina non usa cookie.</p>
+<p id="privAds" hidden>Privacy: i dati che inserisci restano nel tuo browser e non vengono inviati a nessuno. La pagina mostra annunci di Google AdSense: Google usa cookie per mostrarli e misurarli solo dopo il consenso che dai nel banner, e puoi cambiare idea quando vuoi. <a href="https://policies.google.com/technologies/partner-sites?hl=it">Come Google usa i dati dei siti partner</a>.</p>
+</div></footer>
+
+<div class="sticky" id="sticky" hidden><span>Netto al mese <b id="stNet"></b></span><span>Anno <b id="stYear"></b></span></div>
+
+<script>
+{
+__ENGINE__
+const ADS = __ADS__;
+const MESI = ['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'];
+const M3 = ['Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic'];
+const M1 = ['G','F','M','A','M','G','L','A','S','O','N','D'];
+const $ = id => document.getElementById(id);
+const fmt = (n, d = 2) => { const s = Math.abs(n).toFixed(d).split('.'); s[0] = s[0].replace(/\B(?=(\d{3})+(?!\d))/g, "'"); return (n < 0 ? '−' : '') + s.join('.'); };
+const f0 = n => fmt(Math.round(n), 0);
+const pct = r => (r * 100).toFixed(2) + '%';
+const alla = r => /^(8|11|1\.)/.test(pct(r)) ? "all'" : 'al ';
+const mese = m => MESI[m - 1].toLowerCase();
+const BASE = {inMode: 'year', amount: 70000, pays: 13, mode: 'dec', start: 1, end: 12, status: 'single', kids: 0, study: 0,
+  allow: true, allowChild: 215, allowStudy: 268, res: 'res', age: 'a25', lppMode: 'auto', lpp: 250, ainp: 1, igm: 0,
+  bonuses: [], proj: false, raiseOn: false, raiseMonth: 7, raiseAmount: 75000, fixed: 0, car: 0, bik: 0, exp: 0, other: 0};
+const PRESETS = {
+  single: {},
+  b2: {amount: 100000, status: 'married1', kids: 2, age: 'a35'},
+  c1: {amount: 75000, status: 'married2', kids: 1, age: 'a35'},
+  h1: {amount: 65000, status: 'parent', kids: 1, age: 'a35'},
+  fr: {amount: 70000, res: 'fr_new'},
+  maggio: {amount: 85000, start: 5, bonuses: [{month: 12, amount: 3000}]}
+};
+const KEY = 'nettoTicino.v2';
+let state = null, bonuses = [], last = null;
+
+const monthOpts = (from, to) => { let h = ''; for (let m = from; m <= to; m++) h += `<option value="${m}">${MESI[m - 1]}</option>`; return h; };
+function fillSel(sel, key, html, val) {
+  if (sel.dataset.k !== key) { sel.innerHTML = html; sel.dataset.k = key; }
+  const ok = [...sel.options].some(o => o.value === String(val));
+  sel.value = ok ? String(val) : sel.options[sel.options.length - 1].value;
+}
+function syncSelects(s) {
+  fillSel($('end'), 'e' + s.start, monthOpts(s.start, 12), s.end >= s.start ? s.end : 12);
+  const kmin = s.status === 'parent' ? 1 : 0, kmax = s.status === 'single' ? 0 : 6;
+  let kh = ''; for (let k = kmin; k <= kmax; k++) kh += `<option value="${k}">${k}</option>`;
+  fillSel($('kids'), 'k' + kmin + kmax, kh, Math.min(kmax, Math.max(kmin, s.kids)));
+  const kids = +$('kids').value;
+  let sh = ''; for (let k = 0; k <= kids; k++) sh += `<option value="${k}">${k}</option>`;
+  fillSel($('study'), 's' + kids, sh, Math.min(kids, s.study));
+}
+function drawBonuses() {
+  $('bonuses').innerHTML = bonuses.map((b, i) => `<div class="brow"><select id="bm${i}" aria-label="Mese del bonus ${i + 1}">${MESI.map((m, j) => `<option value="${j + 1}"${j + 1 === b.month ? ' selected' : ''}>${m}</option>`).join('')}</select><input id="ba${i}" type="number" inputmode="decimal" min="0" step="50" value="${b.amount}" aria-label="Importo del bonus ${i + 1} in CHF"><button type="button" class="x" data-rm="${i}" aria-label="Rimuovi il bonus ${i + 1}">×</button></div>`).join('');
+  $('addB').hidden = bonuses.length >= 6;
+}
+const show0 = v => v ? String(v) : '';
+function setForm(s) {
+  $('inYear').checked = s.inMode !== 'month'; $('inMonth').checked = s.inMode === 'month';
+  $('amount').value = s.amount; $('pays').value = String(s.pays); $('mode').value = s.mode; $('start').value = String(s.start);
+  $('status').value = s.status;
+  $('allow').checked = !!s.allow; $('allowChild').value = s.allowChild; $('allowStudy').value = s.allowStudy;
+  $('res').value = s.res; $('age').value = s.age;
+  $('lppMode').value = s.lppMode; $('lpp').value = s.lpp; $('ainp').value = s.ainp; $('igm').value = s.igm;
+  bonuses = (s.bonuses || []).map(b => ({month: +b.month, amount: +b.amount})); drawBonuses();
+  $('proj').checked = !!s.proj; $('raiseOn').checked = !!s.raiseOn; $('raiseMonth').value = String(s.raiseMonth); $('raiseAmount').value = s.raiseAmount;
+  for (const k of ['fixed', 'car', 'bik', 'exp', 'other']) $(k).value = show0(s[k]);
+  syncSelects(s);
+}
+function num(id, def) { const v = parseFloat(String($(id).value).replace(/'/g, '').replace(',', '.')); return Number.isFinite(v) ? v : def; }
+const pos = (id, def = 0) => Math.max(0, num(id, def));
+function readForm() {
+  bonuses = bonuses.map((b, i) => ({month: +$('bm' + i).value, amount: pos('ba' + i)}));
+  const s = {inMode: $('inMonth').checked ? 'month' : 'year', amount: pos('amount'), pays: +$('pays').value, mode: $('mode').value,
+    start: +$('start').value, end: +$('end').value, status: $('status').value, kids: +$('kids').value, study: +$('study').value,
+    allow: $('allow').checked, allowChild: pos('allowChild', 215), allowStudy: pos('allowStudy', 268), res: $('res').value, age: $('age').value,
+    lppMode: $('lppMode').value, lpp: pos('lpp'), ainp: pos('ainp'), igm: pos('igm'), bonuses, proj: $('proj').checked,
+    raiseOn: $('raiseOn').checked, raiseMonth: +$('raiseMonth').value, raiseAmount: pos('raiseAmount'),
+    fixed: pos('fixed'), car: pos('car'), bik: pos('bik'), exp: pos('exp'), other: pos('other')};
+  syncSelects(s);
+  s.end = +$('end').value; s.kids = +$('kids').value; s.study = +$('study').value;
+  return s;
+}
+const carMonthly = s => s.car > 0 ? r05(Math.max(150, s.car * 0.009)) : 0;
+function params(s) {
+  const k = s.inMode === 'month' ? s.pays : 1;
+  const annual = s.amount * k, raiseAnnual = s.raiseAmount * k;
+  const kids = s.status === 'single' ? 0 : s.kids;
+  const fam = s.allow && kids > 0 ? (kids - s.study) * s.allowChild + s.study * s.allowStudy : 0;
+  return {code: tariffCode(s.status, kids, s.res), annual, pays: s.pays, start: s.start, end: s.end, mode: s.mode,
+    raise: s.raiseOn && raiseAnnual > 0 ? {month: s.raiseMonth, annual: raiseAnnual} : null,
+    bonuses: s.bonuses.filter(b => b.amount > 0), projectBonus: s.proj,
+    fixed: s.fixed, bik: r05(s.bik + carMonthly(s)), fam, exp: s.exp, other: s.other,
+    avs: 0.053, ad: 0.011, ainp: s.ainp / 100, igm: s.igm / 100, age: s.age, lppMode: s.lppMode, lpp: s.lpp};
+}
+function codeText(code) {
+  const L = code[0], n = +code.slice(1), base = {A: 'A', R: 'A', B: 'B', S: 'B', C: 'C', T: 'C', H: 'H', U: 'H'}[L];
+  let t = {A: 'persona sola', B: 'sposato, un reddito', C: 'sposati, due redditi', H: 'genitore solo'}[base];
+  if (base !== 'A') t += n === 0 ? ', senza figli' : n === 1 ? ', 1 figlio' : `, ${n} figli`;
+  if ('RSTU'.includes(L)) t += ', nuovo frontaliere (80%)';
+  return t;
+}
+function niceStep(max) {
+  for (const s of [500, 1000, 2000, 2500, 5000, 10000, 20000, 25000, 50000]) if (max / s <= 5) return s;
+  return 100000;
+}
+function ui(s, p, res) {
+  const m = s.inMode === 'month';
+  $('mode').disabled = s.pays !== 13;
+  $('amountL').textContent = m ? 'Lordo mensile (CHF)' : 'Lordo annuo da contratto (CHF)';
+  $('raiseL').textContent = m ? 'Nuovo lordo mensile' : 'Nuovo lordo annuo';
+  $('amountH').textContent = s.amount > 0 ? (m ? `Fanno ${f0(p.annual)} franchi all'anno in ${s.pays} mensilità.` : `Fanno ${fmt(r05(p.annual / s.pays))} franchi al mese per ${s.pays} mensilità.`) : '';
+  $('kidsRow').hidden = s.status === 'single';
+  $('allowBox').hidden = s.status === 'single' || s.kids === 0;
+  $('allowAmt').hidden = !s.allow;
+  $('resH').textContent = s.res === 'fr_new' ? "La Svizzera trattiene l'80% dell'imposta (tabelle R, S, T, U); il resto lo dichiari in Italia, che qui non è calcolata."
+    : s.res === 'fr_old' ? 'Paghi l\'imposta solo in Svizzera, con le tabelle normali A, B, C e H.' : '';
+  $('statusH').textContent = s.kids > 4 && s.status !== 'single' ? 'Le tabelle qui arrivano a quattro figli: con più figli l\'imposta reale è un po\' più bassa.' : "Sposato vale anche per l'unione domestica registrata.";
+  $('lppRow').hidden = s.lppMode !== 'manual';
+  const lppA = lppAuto(p.annual + s.fixed * 12, s.age);
+  $('lppH').textContent = s.lppMode === 'auto' ? `Stima: ${fmt(lppA)} franchi al mese. Molte casse trattengono di più: se hai una busta paga, usa il tuo importo.`
+    : s.lppMode === 'manual' ? 'Copia la trattenuta LPP dalla tua busta paga.' : "Per esempio se guadagni meno di 22'680 franchi all'anno.";
+  $('raiseRow').hidden = !s.raiseOn;
+  const car = carMonthly(s);
+  $('carH').textContent = car ? `Aggiunge ${fmt(car)} franchi al mese al lordo: non li ricevi, ma pagano AVS e imposta.` : 'Se la usi anche per te, ogni mese si aggiunge al lordo lo 0.9% del prezzo.';
+  $('svPay').textContent = s.amount > 0 ? (m ? `${f0(s.amount)} al mese` : `${f0(s.amount)} all'anno`) + ` · ${s.pays}` : '';
+  $('svWho').textContent = res ? `Tabella ${res.code}` : '';
+  $('svSoc').textContent = res ? `LPP ${fmt(res.lppMonthly)} · LAINF ${s.ainp}%` : '';
+  const nb = s.bonuses.filter(b => b.amount > 0).length;
+  $('svBon').textContent = [nb ? (nb === 1 ? '1 bonus' : `${nb} bonus`) : '', s.raiseOn ? `aumento da ${mese(s.raiseMonth)}` : ''].filter(Boolean).join(' · ') || 'Nessuno';
+  const no = ['fixed', 'car', 'bik', 'exp', 'other'].filter(k => s[k] > 0).length;
+  $('svOth').textContent = no ? (no === 1 ? '1 voce' : `${no} voci`) : 'Nessuna';
+}
+function render() {
+  const s = readForm();
+  state = s;
+  try { localStorage.setItem(KEY, JSON.stringify(s)); } catch (e) {}
+  const p = params(s);
+  const warn = $('warn');
+  if (!(p.annual >= 1000 && p.annual <= 1000000)) {
+    ui(s, p, null);
+    warn.hidden = false; warn.textContent = s.inMode === 'month' ? 'Inserisci un lordo mensile tra 100 e 80\'000 franchi.' : 'Inserisci un lordo annuo tra 1\'000 e 1\'000\'000 di franchi.';
+    return;
+  }
+  const res = compute(p);
+  last = res;
+  ui(s, p, res);
+  const live = res.months.filter(Boolean);
+  warn.hidden = !res.out;
+  if (res.out) warn.textContent = 'In alcuni mesi il reddito annuo proiettato supera 250\'800 franchi: lì usiamo l\'ultima aliquota pubblicata, quindi la stima è meno precisa. Sopra 120\'000 franchi la tassazione ordinaria ulteriore è comunque obbligatoria.';
+  const top = live.reduce((a, b) => b.net > a.net ? b : a, live[0]);
+  $('hLab').textContent = p.raise && live.some(x => x.m >= p.raise.month) ? "Netto in un mese normale, dopo l'aumento" : 'Netto in un mese normale';
+  $('hNet').textContent = f0(res.typical);
+  $('hSub').textContent = `su ${fmt(res.typicalGross)} franchi lordi al mese` + (p.fam ? `, più ${fmt(p.fam)} di assegni familiari` : '');
+  $('hCode').innerHTML = `<span class="pill">${res.code}</span>${codeText(res.code)}`;
+  const full = s.start === 1 && s.end === 12;
+  $('sYearL').textContent = full ? "Netto nell'anno" : `Netto da ${mese(s.start)} a ${mese(s.end)}`;
+  $('sYear').textContent = f0(res.tot.net);
+  $('sTax').innerHTML = `${f0(res.tot.tax)} <small>${pct(res.tot.tax / res.tot.taxable)} del lordo annuo</small>`;
+  $('sRate').innerHTML = `${pct(res.finalRate)} <small>tabella ${res.code}</small>`;
+  $('sMax').innerHTML = `${f0(top.net)} <small>${mese(top.m)}</small>`;
+  $('stNet').textContent = f0(res.typical); $('stYear').textContent = f0(res.tot.net);
+  $('legSoc').textContent = res.tot.other > 0 ? 'Contributi, LPP e trattenute' : 'Contributi e LPP';
+  const max = Math.max(...live.map(x => x.cash));
+  const step = niceStep(max), ceil = Math.ceil(max / step) * step;
+  const compact = ceil >= 10000;
+  const lab = v => v === 0 ? '0' : compact ? (v / 1000) + 'k' : fmt(v, 0);
+  let html = '';
+  for (let v = 0; v <= ceil + 1e-6; v += step) html += `<div class="grid" style="bottom:${v / ceil * 100}%"><b>${lab(v)}</b></div>`;
+  html += '<div class="cols">' + res.months.map((x, i) => {
+    if (!x) return `<div class="col" aria-hidden="true"></div>`;
+    const ded = x.social + x.lpp + x.other;
+    const seg = [['--tax', x.tax], ['--soc', ded], ['--net', x.net]].filter(z => z[1] > 0).map(z => `<i style="background:var(${z[0]});flex:${z[1]} 1 0"></i>`).join('');
+    return `<div class="col" tabindex="0" data-i="${i}" aria-label="${MESI[i]}: netto ${fmt(x.net)} franchi"><div class="bar" style="height:${Math.max(0, x.cash) / ceil * 100}%">${seg}</div></div>`;
+  }).join('') + '</div>';
+  $('plot').innerHTML = html;
+  document.querySelectorAll('#xax > span').forEach((el, i) => el.classList.toggle('off', !res.months[i]));
+  const ups = live.filter(x => x.recalc >= 20).sort((a, b) => b.recalc - a.recalc);
+  const refund = -live.filter(x => x.recalc <= -1).reduce((t, x) => t + x.recalc, 0);
+  const parts = [];
+  if (ups.length) { const u = ups[0], mn = mese(u.m); parts.push(`${/^[aeiou]/.test(mn) ? 'Ad' : 'A'} ${mn} l'aliquota sale ${alla(u.rate)}${pct(u.rate)}: dentro l'imposta ci sono ${f0(u.recalc)} franchi di ricalcolo sui mesi già pagati.`); }
+  if (refund >= 20) parts.push(`Nei mesi in cui l'aliquota scende ti tornano in tutto ${f0(refund)} franchi, già compresi nel netto.`);
+  if (!parts.length) parts.push('L\'aliquota resta uguale tutto l\'anno, quindi non ci sono ricalcoli: ogni mese paghi la stessa percentuale.');
+  $('note').textContent = parts.join(' ');
+  const hasFam = res.tot.fam > 0, hasOth = live.some(x => x.exp || x.other || x.bik);
+  const cols = [['Mese', x => MESI[x.m - 1], ''], ['Lordo', x => fmt(x.gross), ''], hasFam && ['Assegni familiari', x => fmt(x.fam), ''],
+    ['Contributi e LPP', x => fmt(x.social + x.lpp), ''], ['Imposta alla fonte', x => fmt(x.tax), ''], ['Aliquota', x => pct(x.rate), ''],
+    ['Ricalcolo mesi precedenti', x => Math.abs(x.recalc) < 1 ? '–' : (x.recalc > 0 ? '+' : '') + fmt(x.recalc), 'r'],
+    hasOth && ['Altre voci', x => fmt(x.exp - x.other - x.bik), ''], ['Netto', x => fmt(x.net), 'n']].filter(Boolean);
+  $('th').innerHTML = '<tr>' + cols.map(c => `<th>${c[0]}</th>`).join('') + '</tr>';
+  $('tb').innerHTML = live.map(x => '<tr>' + cols.map((c, j) => `<td data-l="${j ? c[0] : ''}"${c[2] === 'n' ? ' class="n"' : c[2] === 'r' && x.recalc >= 1 ? ' class="pos"' : ''}>${c[1](x)}</td>`).join('') + '</tr>').join('');
+  const T = res.tot, totv = {Mese: 'Totale', Lordo: fmt(T.gross), 'Assegni familiari': fmt(T.fam), 'Contributi e LPP': fmt(T.social + T.lpp), 'Imposta alla fonte': fmt(T.tax),
+    Aliquota: pct(T.tax / T.taxable), 'Ricalcolo mesi precedenti': '', 'Altre voci': fmt(T.exp - T.other - T.bik), Netto: fmt(T.net)};
+  $('tf').innerHTML = '<tr>' + cols.map((c, j) => `<td data-l="${j ? (c[0] === 'Aliquota' ? 'Aliquota media' : c[0]) : ''}"${c[2] === 'n' ? ' class="n"' : ''}>${totv[c[0]]}</td>`).join('') + '</tr>';
+}
+function showTip(col) {
+  if (!last || !col || col.dataset.i === undefined) return;
+  const x = last.months[+col.dataset.i]; if (!x) return;
+  const row = (a, b) => `<p><span>${a}</span><span>${b}</span></p>`;
+  $('tip').innerHTML = `<strong>${MESI[x.m - 1]}</strong>` + row('Lordo', fmt(x.gross)) + (x.fam ? row('Assegni familiari', fmt(x.fam)) : '') + row('Imposta alla fonte', fmt(x.tax))
+    + (Math.abs(x.recalc) >= 1 ? row('di cui ricalcolo', (x.recalc > 0 ? '+' : '') + fmt(x.recalc)) : '') + row('Aliquota', pct(x.rate)) + row('Contributi e LPP', fmt(x.social + x.lpp))
+    + (x.exp || x.other || x.bik ? row('Altre voci', fmt(x.exp - x.other - x.bik)) : '') + row('<b>Netto</b>', `<b>${fmt(x.net)}</b>`);
+  const tip = $('tip'), cr = $('chart').getBoundingClientRect(), r = col.getBoundingClientRect();
+  tip.hidden = false;
+  const w = tip.offsetWidth;
+  tip.style.left = Math.max(0, Math.min(r.left - cr.left + r.width / 2 - w / 2, cr.width - w)) + 'px';
+}
+const hideTip = () => { $('tip').hidden = true; };
+function applyPreset(k) {
+  setForm({...BASE, ...PRESETS[k], bonuses: (PRESETS[k].bonuses || []).map(b => ({...b}))});
+  render();
+}
+$('start').innerHTML = monthOpts(1, 12);
+$('raiseMonth').innerHTML = monthOpts(2, 12);
+$('xax').innerHTML = M3.map((m, i) => `<span><span class="l3">${m}</span><span class="l1">${M1[i]}</span></span>`).join('');
+$('plot').addEventListener('pointerover', e => showTip(e.target.closest('.col')));
+$('plot').addEventListener('pointerleave', hideTip);
+$('plot').addEventListener('focusin', e => showTip(e.target.closest('.col')));
+$('plot').addEventListener('focusout', hideTip);
+$('form').addEventListener('input', e => { if (e.target.id !== 'preset') render(); });
+$('form').addEventListener('change', e => { if (e.target.id === 'preset') { const k = e.target.value; e.target.value = ''; if (k) applyPreset(k); } else render(); });
+$('form').addEventListener('submit', e => e.preventDefault());
+$('bonuses').addEventListener('click', e => {
+  const b = e.target.closest('[data-rm]'); if (!b) return;
+  readForm(); bonuses.splice(+b.dataset.rm, 1); drawBonuses(); render();
+});
+$('addB').addEventListener('click', () => { readForm(); bonuses.push({month: 6, amount: 1000}); drawBonuses(); render(); $('ba' + (bonuses.length - 1)).focus(); });
+$('copy').addEventListener('click', async () => {
+  if (!last) return;
+  const rows = [['Mese', 'Lordo', 'Assegni familiari', 'Contributi e LPP', 'Imposta alla fonte', 'Aliquota', 'Ricalcolo', 'Altre voci', 'Netto']];
+  last.months.filter(Boolean).forEach(x => rows.push([MESI[x.m - 1], x.gross.toFixed(2), x.fam.toFixed(2), (x.social + x.lpp).toFixed(2), x.tax.toFixed(2), pct(x.rate), x.recalc.toFixed(2), (x.exp - x.other - x.bik).toFixed(2), x.net.toFixed(2)]));
+  const T = last.tot;
+  rows.push(['Totale', T.gross.toFixed(2), T.fam.toFixed(2), (T.social + T.lpp).toFixed(2), T.tax.toFixed(2), '', '', (T.exp - T.other - T.bik).toFixed(2), T.net.toFixed(2)]);
+  const btn = $('copy');
+  try { await navigator.clipboard.writeText(rows.map(r => r.join('\t')).join('\n')); btn.textContent = 'Copiata'; }
+  catch (e) { btn.textContent = 'Copia non riuscita'; }
+  setTimeout(() => { btn.textContent = 'Copia la tabella'; }, 1800);
+});
+let saved = null;
+try { saved = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) {}
+if (saved && typeof saved === 'object' && saved.amount > 0) { setForm({...BASE, ...saved}); render(); } else applyPreset('single');
+const sticky = $('sticky');
+if ('IntersectionObserver' in window) new IntersectionObserver(es => { sticky.hidden = es[0].isIntersecting; }).observe($('result'));
+const adsOn = !!ADS.client && ADS.slots.some(Boolean) && (location.hostname === ADS.host || location.hostname.endsWith('.' + ADS.host));
+$('privAds').hidden = !adsOn; $('privNo').hidden = adsOn;
+if (adsOn) {
+  const sc = document.createElement('script');
+  sc.async = true; sc.crossOrigin = 'anonymous';
+  sc.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=' + encodeURIComponent(ADS.client);
+  document.head.appendChild(sc);
+  document.querySelectorAll('.ad').forEach((box, i) => {
+    const slot = ADS.slots[i]; if (!slot) return;
+    const ins = box.querySelector('ins');
+    ins.setAttribute('data-ad-client', ADS.client); ins.setAttribute('data-ad-slot', slot);
+    box.hidden = false;
+    (window.adsbygoogle = window.adsbygoogle || []).push({});
+  });
+}
+}
+</script>
+</body>
+</html>
