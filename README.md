@@ -26,7 +26,7 @@ Ogni anno vanno sostituite le tabelle in `src/tables_2026.json` con quelle nuove
 
 ## Annunci
 
-Gli spazi pubblicitari sono già nella pagina, ma restano nascosti finché in `src/build.py` non si inseriscono l'ID editore di Google AdSense (`ca-pub-…`) e gli ID delle unità annuncio. Con l'ID editore va aggiunto anche il file `ads.txt` nella radice del sito.
+L'ID editore Google AdSense è in `src/build.py`: il build mette il codice AdSense e il meta tag nella pagina e genera `ads.txt`. I tre spazi pubblicitari restano nascosti finché in `ADS['slots']` non ci sono gli ID delle unità annuncio. `python3 src/build.py --preview FILE` crea una copia senza annunci per le anteprime.
 
 ## Fonti
 

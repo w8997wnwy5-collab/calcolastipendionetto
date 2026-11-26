@@ -22,7 +22,7 @@
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3CclipPath id='c'%3E%3Crect width='32' height='32' rx='7'/%3E%3C/clipPath%3E%3Cg clip-path='url(%23c)'%3E%3Crect width='32' height='16' fill='%23d52b1e'/%3E%3Crect y='16' width='32' height='16' fill='%23123c86'/%3E%3C/g%3E%3Ctext x='16' y='23.5' font-family='Arial,sans-serif' font-weight='700' font-size='19' text-anchor='middle' fill='%23fff'%3EN%3C/text%3E%3C/svg%3E">
 <link rel="preload" href="fonts/mona-sans-var.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<script type="application/ld+json">__LD__</script>
+__ADHEAD__<script type="application/ld+json">__LD__</script>
 <style>
 /* VOICE work: a money tool, calm like a newspaper graphics desk
    IDEA a Ticino payslip run for the whole year, twelve payslips side by side, for any household
@@ -533,13 +533,9 @@ try { saved = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) {}
 if (saved && typeof saved === 'object' && saved.amount > 0) { setForm({...BASE, ...saved}); render(); } else applyPreset('single');
 const sticky = $('sticky');
 if ('IntersectionObserver' in window) new IntersectionObserver(es => { sticky.hidden = es[0].isIntersecting; }).observe($('result'));
-const adsOn = !!ADS.client && ADS.slots.some(Boolean) && (location.hostname === ADS.host || location.hostname.endsWith('.' + ADS.host));
+const adsOn = !!ADS.client && (location.hostname === ADS.host || location.hostname.endsWith('.' + ADS.host));
 $('privAds').hidden = !adsOn; $('privNo').hidden = adsOn;
 if (adsOn) {
-  const sc = document.createElement('script');
-  sc.async = true; sc.crossOrigin = 'anonymous';
-  sc.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=' + encodeURIComponent(ADS.client);
-  document.head.appendChild(sc);
   document.querySelectorAll('.ad').forEach((box, i) => {
     const slot = ADS.slots[i]; if (!slot) return;
     const ins = box.querySelector('ins');

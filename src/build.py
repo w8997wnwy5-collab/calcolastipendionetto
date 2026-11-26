@@ -15,7 +15,17 @@ open(P('engine.built.js'), 'w').write(src.replace('__TABLES__', js))
 print('engine.built.js', len(src.replace('__TABLES__', js)), 'bytes')
 
 SITE = 'https://calcolastipendionetto.ch/'
-ADS = {'client': '', 'host': 'calcolastipendionetto.ch', 'slots': ['', '', '']}
+import sys
+# Google AdSense: ID editore e, dopo l'approvazione, gli ID delle tre unità annuncio
+# (sotto il calcolatore, dopo la tabella, dopo le domande frequenti).
+ADS = {'client': 'ca-pub-1734635523686592', 'host': 'calcolastipendionetto.ch', 'slots': ['', '', '']}
+# --preview FILE: versione senza codice pubblicitario, per le anteprime fuori dal dominio
+PREVIEW = sys.argv[2] if len(sys.argv) > 2 and sys.argv[1] == '--preview' else None
+if PREVIEW:
+    ADS = {**ADS, 'client': ''}
+ADHEAD = '' if not ADS['client'] else (
+    f'<meta name="google-adsense-account" content="{ADS["client"]}">\n'
+    f'<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={ADS["client"]}" crossorigin="anonymous"></script>\n')
 FAQ = [
  ("Quale tabella dell'imposta alla fonte mi tocca?",
   "Dipende dalla tua situazione familiare. A: persona sola senza figli. B: coppia sposata in cui lavora solo uno. "
@@ -62,11 +72,17 @@ ld = [
 engine = open(P('engine.built.js')).read()
 page = open(P('template.html')).read()
 for k, v in {'__FAQ__': faq_html, '__LD__': json.dumps(ld, ensure_ascii=False).replace('</', '<\\/'),
-             '__ADS__': json.dumps(ADS), '__SITE__': SITE}.items():
+             '__ADS__': json.dumps(ADS), '__SITE__': SITE, '__ADHEAD__': ADHEAD}.items():
     assert k in page, k
     page = page.replace(k, v)
 assert page.count('__ENGINE__') == 1
 page = page.replace('__ENGINE__', engine)
 assert '__' not in page.replace('__proto__', ''), [l for l in page.splitlines() if '__' in l][:3]
-open(os.path.join(ROOT, 'index.html'), 'w').write(page)
-print('index.html', len(page), 'bytes')
+if PREVIEW:
+    open(PREVIEW, 'w').write(page)
+    print(PREVIEW, len(page), 'bytes (anteprima senza annunci)')
+else:
+    open(os.path.join(ROOT, 'index.html'), 'w').write(page)
+    if ADS['client']:
+        open(os.path.join(ROOT, 'ads.txt'), 'w').write(f"google.com, {ADS['client'].replace('ca-', '')}, DIRECT, f08c47fec0942fa0\n")
+    print('index.html', len(page), 'bytes')
